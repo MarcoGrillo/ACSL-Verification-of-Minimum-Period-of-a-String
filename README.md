@@ -20,6 +20,6 @@ Write a C function
 
    unsigned per(const char x[], unsigned l)
 
-that given a ###string ###x of length ###l returns ###per(x). 
+that given a ##string ##x of length ##l returns ##per(x). 
 
 Then write a specification of the function for ###Frama-C to demonstrate the correctness
