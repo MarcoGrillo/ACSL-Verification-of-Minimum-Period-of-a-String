@@ -1,24 +1,24 @@
 //////////////////////////////////////////////////////////////////
 //                          SEMANTICA                           //
 //////////////////////////////////////////////////////////////////
-/* Sia x una stringa non vuota.  Un intero p tale che
-0 < p ≤|x| si dice essere "un periodo di x" se
+/* Given a not-empty string x.  An integer number p such that
+0 < p ≤|x| is meant to be "a period of x" if
 
   x[i] = x[i + p]
 
-per i = 0, 1, ... , |x| − p − 1.
-Si noti che, per ogni stringa non vuota, la lunghezza della stringa
-è un periodo della medesima.  In tal modo, ogni stringa non vuota
-ha almeno un periodo.  E' quindi ben definito il concetto di minimo
-periodo di una stringa x, denotato da per(x):
+for i = 0, 1, ... , |x| − p − 1.
+Note that, for each not-empty string, the length of the string
+is a period of itself.  In this way, every not-empty string
+has got at least one period.  So is well formed the concept of minimum
+period of string x, denoted by per(x):
 
-  per(x) = min { p | p è un periodo di x }.
+  per(x) = min { p | p is period of x }.
 
-Scriva una funzione C
+Write a C function
 
    unsigned per(const char x[], unsigned l)
 
-che data una stringa x di lunghezza l restituisce per(x). */
+that, given a string x of length l, returns per(x). */
 //////////////////////////////////////////////////////////////////
 
 
