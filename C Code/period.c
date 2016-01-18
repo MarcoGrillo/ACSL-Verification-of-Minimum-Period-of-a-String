@@ -31,11 +31,15 @@ that, given a string x of length l, returns per(x). */
         ensures \result = 1;
 
     behavior one: 
-        assumes p > 0;
-        ensures \forall int i; 0 <= i < l-p-1; x[i] == x[i+p]
+        assumes \forall int i; 0 <= i < l-p-1; x[i] == x[i+p];
+        ensures \result = 1;
 
-    complete behaviors one,zero;
-    disjoint behaviors one,zero;
+    behavior two:
+        assumes !(\forall int i; 0 <= i < l-p-1; x[i] == x[i+p]);
+        ensures \result = 0;
+
+    complete behaviors zero,one,two;
+    disjoint behaviors zero,one,two;
 */
 
 bool has_period(char x[], int p, unsigned l) {
@@ -48,11 +52,11 @@ bool has_period(char x[], int p, unsigned l) {
             loop invariant (\forall int i; 0 <= i <= l-p-1; )
         */
         for (int i = 0 ; i < l-p-1 ; ++i) {
-            if (x[i] == x[i + p])
-                return true;
+            if (x[i] != x[i + p])
+                return false;
         }
 
-    return false;
+    return true;
 }
 
 
@@ -65,9 +69,10 @@ bool has_period(char x[], int p, unsigned l) {
     requires l >= 0;
     requires \valid(x+(0..l-1));
     
-    assigns \nothing
+    assigns \nothing;
 
     ensures 0 < \result <= l;
+    ensures \forall int i; 0 < i < p ==> !(has_period(x,p,l));
     ensures has_period(x,p,l);
 */
 
@@ -76,10 +81,10 @@ unsigned per(char x[], unsigned l) {
         loop assigns p;
 
         loop invariant 1 <= p <= l;
-        loop invariant 
+        loop invariant 0 <= p <= l;
         loop variant l - p;
     */
-    for(int p = 1; p<=l; ++p) {
+    for(int p = 1; p <= l; ++p) {
         if(has_period(x,p,l))
             return p;
     }
