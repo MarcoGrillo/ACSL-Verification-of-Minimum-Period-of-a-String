@@ -21,11 +21,6 @@ Write a C function
 that, given a string x of length l, returns per(x). */
 //////////////////////////////////////////////////////////////////
 
-
-#include <stdio.h>
-#include <string.h>
-
-
 /*@ 
     requires l >= 0;
     requires \valid(x+(0..(l-1)));
