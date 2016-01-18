@@ -60,6 +60,12 @@ bool has_period(char x[], int p, unsigned l) {
     return false;
 }
 
+
+/*@
+   predicate has_period(char[] x, int p, unsigned l) =
+      \forall int i; i <= l-p-1 ==>  x[i] == x[i+p]
+*/
+
 /*@
     requires l >= 0;
     requires \valid(x+(0..l-1));
@@ -67,14 +73,16 @@ bool has_period(char x[], int p, unsigned l) {
     assigns \nothing
 
     ensures 0 < \result <= l;
-    ensures \forall int i; i <= p ==> 
+    ensures has_period(x,p,l);
 */
 
 unsigned per(char x[], unsigned l) {
     /*@
         loop assigns p;
 
-
+        loop invariant 1 <= p <= l;
+        loop invariant 
+        loop variant l - p;
     */
     for(int p = 1; p<=l; ++p) {
         if(has_period(x,p,l))
