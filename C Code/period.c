@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////
-//                          SEMANTICA                           //
+//                          SEMANTICS                          //
 //////////////////////////////////////////////////////////////////
 /* Given a not-empty string x.  An integer number p such that
 0 < p ≤|x| is meant to be "a period of x" if
