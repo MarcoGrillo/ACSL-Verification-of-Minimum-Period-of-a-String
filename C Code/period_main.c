@@ -15,9 +15,14 @@ unsigned has_period(char x[], int p, unsigned l) {
 
 unsigned per(char x[], unsigned l) {
     int p = 1;
-    while (p <= l && !has_period(x, p, l))
+    /* while (p <= l && !has_period(x, p, l))
         ++p;
     return p;
+    */
+     for(int p = 1; p<=l; ++p) {
+        if(has_period(x,p,l))
+            return p;
+    }
 }
 
 int main() {
