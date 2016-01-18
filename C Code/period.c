@@ -43,9 +43,9 @@ that, given a string x of length l, returns per(x). */
     disjoint behaviors one,zero;
 */
 
-unsigned has_period(char x[], int p, unsigned l) {
-    if (p == l) return 1;
-    if ((l % p) != 0) return 0;
+bool has_period(char x[], int p, unsigned l) {
+    if (p == l) return true;
+    if ((l % p) != 0) return false;
 
         /*@
             loop assigns i;
@@ -54,10 +54,10 @@ unsigned has_period(char x[], int p, unsigned l) {
         */
         for (int i = 0 ; i < l-p-1 ; ++i) {
             if (x[i] == x[i + p])
-                return 1;
+                return true;
         }
 
-    return 0;
+    return false;
 }
 
 /*@
@@ -67,7 +67,7 @@ unsigned has_period(char x[], int p, unsigned l) {
     assigns \nothing
 
     ensures 0 < \result <= l;
-    ensures  
+    ensures \forall int i; i <= p ==> 
 */
 
 unsigned per(char x[], unsigned l) {
