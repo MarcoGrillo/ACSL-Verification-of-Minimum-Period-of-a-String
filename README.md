@@ -22,4 +22,4 @@ Write a C function
 
 that given a **string x** of length **l** returns **per(x)**. 
 
-Then write a specification of the function for **Frama-C** to demonstrate the correctness.
+Then write a specification of the function for **Frama-C** to demonstrate the correctness using **ACSL**.
