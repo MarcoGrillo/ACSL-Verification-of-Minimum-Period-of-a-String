@@ -23,42 +23,44 @@ that, given a string x of length l, returns per(x). */
 
 
 /*@ 
-    requires l >= 0;
+    requires l > 0;
     requires p >= 0;
     
-    //behavior zero:
-      //assumes \forall int i; 0 <= i < l-p-1 ==> p == 1;
-      //ensures \result == 1;
+    behavior zero:
+      assumes  p == l;
+      ensures \result == 1;
     
     behavior one: 
       assumes \forall int i; 0 <= i < l-p-1 ==> x[i] == x[i+p];
       ensures \result == 1;
-
+  
     behavior two:
-      assumes !(\exists int i; 0 <= i < l-p-1 ==> x[i] == x[i+p]);
+      assumes !(\forall int i; 0 <= i < l-p-1 ==> x[i] == x[i+p]);
       ensures \result == 0;
 
-    complete behaviors zero,one,two;
-    disjoint behavior zero,one,two;
+    behavior three:
+      assumes l%p != 0;
+      ensures \result == 0;
+
+    complete behaviors;
+    disjoint behaviors;
 */
 
-unsigned has_period(const char x[], int p, unsigned l) {
+unsigned has_period(const char x[], unsigned int p, unsigned l) {
     if (p == l) return 1;
     if ((l % p) != 0) return 0;
-
-    int i = 0;
-
         /*@
             loop assigns i;
 
-            loop invariant \forall int i; 0 <= i < l-p-1 ==> p == 1;
+            loop invariant \forall int j; 0 <= j < i ==> (x[j] == x[j+p]);
         */
+        
         for (int i = 0 ; i < l-p-1 ; ++i) {
             if (x[i] != x[i + p])
                 return 0;
-        }
-
-    return 1;
+        }     
+       
+    return 1; 
 }
 
 
@@ -71,7 +73,6 @@ unsigned has_period(const char x[], int p, unsigned l) {
     requires l > 0;
     requires \valid(x+(0..l-1));
     
-    //ensures \forall int i; 0 < i <= l ==> !(has_period(x,\result,l));
     ensures 0 < \result <= l;
 */
 
