@@ -21,7 +21,6 @@ Write a C function
 that, given a string x of length l, returns per(x). */
 //////////////////////////////////////////////////////////////////
 
-
 /*@ 
     requires l > 0;
     requires p >= 0;
@@ -31,15 +30,17 @@ that, given a string x of length l, returns per(x). */
       ensures \result == 1;
     
     behavior one: 
+      assumes l != p && (l%p) == 0;
       assumes \forall int i; 0 <= i < l-p-1 ==> x[i] == x[i+p];
       ensures \result == 1;
   
     behavior two:
+      assumes l != p && (l%p) == 0;
       assumes !(\forall int i; 0 <= i < l-p-1 ==> x[i] == x[i+p]);
       ensures \result == 0;
 
     behavior three:
-      assumes l%p != 0;
+      assumes p != l && l%p != 0;
       ensures \result == 0;
 
     complete behaviors;
@@ -53,6 +54,8 @@ unsigned has_period(const char x[], unsigned int p, unsigned l) {
             loop assigns i;
 
             loop invariant \forall int j; 0 <= j < i ==> (x[j] == x[j+p]);
+            loop invariant i <= l-p-1;
+            loop invariant i >= 0;
         */
         
         for (int i = 0 ; i < l-p-1 ; ++i) {
@@ -62,7 +65,6 @@ unsigned has_period(const char x[], unsigned int p, unsigned l) {
        
     return 1; 
 }
-
 
 /*@
    predicate has_period(char* x, unsigned int p, unsigned l) =
