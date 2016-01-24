@@ -68,7 +68,7 @@ unsigned has_period(const char x[], unsigned int p, unsigned l) {
 
 /*@
    predicate has_period(char* x, unsigned int p, unsigned l) =
-      \forall int i; i <= (l-p-1) ==>  x[i] == x[i+p];
+      \forall int i; i < (l-p-1) ==>  x[i] == x[i+p];
 */
 
 /*@
@@ -76,6 +76,8 @@ unsigned has_period(const char x[], unsigned int p, unsigned l) {
     requires \valid(x+(0..l-1));
     
     ensures 0 < \result <= l;
+    ensures has_period(x,\result,l);
+    ensures \forall unsigned int p; 0 < p < \result ==> !has_period(x,p,l);
 */
 
 unsigned per(const char x[], unsigned l) {
@@ -83,10 +85,11 @@ unsigned per(const char x[], unsigned l) {
 
     /*@
         loop invariant 0 < p <= l;
+        loop invariant \forall unsigned m; 1 <= m < p ==> !has_period(x,m,l);
     */
 
     while(p <= l && !has_period(x,p,l)) 
         ++p;
 
-    return 1;
+    return p;
 }
