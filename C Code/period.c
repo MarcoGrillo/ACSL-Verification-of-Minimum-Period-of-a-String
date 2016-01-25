@@ -21,44 +21,35 @@ Write a C function
 that, given a string x of length l, returns per(x). */
 //////////////////////////////////////////////////////////////////
 
+/*@
+   predicate is_periodic(char* x, unsigned int p, unsigned int l) =
+      (\forall unsigned int i; 0 <= i < (l-p-1) ==>  x[i] == x[i+p]) && (l%p == 0) || (p == l);
+*/
+
 /*@ 
+    requires \valid(x+(0..l-1));
     requires l > 0;
-    requires p >= 0;
+    requires p > 0;
     
-    behavior zero:
-      assumes  p == l;
-      ensures \result == 1;
-    
-    behavior one: 
-      assumes l != p && (l%p) == 0;
-      assumes \forall int i; 0 <= i < l-p-1 ==> x[i] == x[i+p];
-      ensures \result == 1;
-  
-    behavior two:
-      assumes l != p && (l%p) == 0;
-      assumes !(\forall int i; 0 <= i < l-p-1 ==> x[i] == x[i+p]);
-      ensures \result == 0;
+    assigns \nothing;
 
-    behavior three:
-      assumes p != l && l%p != 0;
-      ensures \result == 0;
-
-    complete behaviors;
-    disjoint behaviors;
+    ensures is_periodic(x,p,l) ==> \result == 1;
+    ensures !is_periodic(x,p,l) ==> \result == 0;
 */
 
 unsigned has_period(const char x[], unsigned int p, unsigned l) {
+
     if (p == l) return 1;
     if ((l % p) != 0) return 0;
         /*@
             loop assigns i;
 
-            loop invariant \forall int j; 0 <= j < i ==> (x[j] == x[j+p]);
+            loop invariant \forall unsigned int j; 0 <= j < i ==> (x[j] == x[j+p]);
             loop invariant i <= l-p-1;
             loop invariant i >= 0;
         */
         
-        for (int i = 0 ; i < l-p-1 ; ++i) {
+        for (unsigned i = 0 ; i < l-p-1 ; ++i) {
             if (x[i] != x[i + p])
                 return 0;
         }     
@@ -67,29 +58,28 @@ unsigned has_period(const char x[], unsigned int p, unsigned l) {
 }
 
 /*@
-   predicate has_period(char* x, unsigned int p, unsigned l) =
-      \forall int i; i < (l-p-1) ==>  x[i] == x[i+p];
-*/
-
-/*@
-    requires l > 0;
     requires \valid(x+(0..l-1));
-    
-    ensures 0 < \result <= l;
-    ensures has_period(x,\result,l);
-    ensures \forall unsigned int p; 0 < p < \result ==> !has_period(x,p,l);
+    requires l > 0;
+
+    ensures 1 <= \result <= l;
+    ensures is_periodic(x,\result,l);    
+    ensures \forall unsigned int p; 0 < p < \result ==> !is_periodic(x,p,l);                      
 */
 
 unsigned per(const char x[], unsigned l) {
-     int p = 1;
-
+    unsigned int p;
     /*@
-        loop invariant 0 < p <= l;
-        loop invariant \forall unsigned m; 1 <= m < p ==> !has_period(x,m,l);
+        loop assigns p;
+        loop invariant p >= 1;
+        loop invariant p <= l;
+        loop invariant \forall unsigned int i; 0 < i < p ==> !is_periodic(x,i,l);
+        loop variant l-p;
     */
 
-    while(p <= l && !has_period(x,p,l)) 
-        ++p;
+    for(p = 1; p < l; ++p) {
+        if(has_period(x,p,l))
+            return p;
+    }
 
     return p;
 }
